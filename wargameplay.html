@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>𝗪𝗔𝗥𝗟𝗢𝗥𝗗𝗦</title>
+    <link rel="icon" href="war.jpg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #0a0f0a 0%, #0b1a0b 100%);
+            min-height: 100vh;
+            color: #f0f0f0;
+        }
+        .age-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .age-card {
+            background: #1e1e1e;
+            max-width: 420px;
+            width: 90%;
+            border-radius: 40px;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border: 3px solid #ff3366;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            animation: pulse 1.2s infinite;
+        }
+        .age-badge {
+            background: linear-gradient(135deg, #d60a03, #b91c1c);
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            font-size: 2.5rem;
+            padding: 0.5rem;
+            border-radius: 80px;
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 0 4px white;
+        }
+        .age-card h2 { color: #ffcc00; margin: 10px 0; }
+        .confirm-age {
+            background: gold;
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 40px;
+            margin-top: 20px;
+            cursor: pointer;
+            color: black;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 #ff3366; }
+            70% { box-shadow: 0 0 0 10px rgba(255,51,102,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,51,102,0); }
+        }
+        .app-wrapper { display: none; }
+        .main-layout { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: #0c1a0c;
+            border-right: 2px solid #b8860b;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            transform: translateX(-100%);
+            overflow-y: auto;
+            background: #0a0f0a;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-header { padding: 25px 20px; background: #00000066; border-bottom: 2px solid gold; }
+        .sidebar-header h2 { color: gold; text-shadow: 0 0 5px #ff9900; }
+        .sidebar nav ul { list-style: none; margin-top: 20px; }
+        .sidebar nav ul li {
+            padding: 14px 24px;
+            margin: 8px 12px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e0e0e0;
+        }
+        .sidebar nav ul li:hover, .sidebar nav ul li.active {
+            background: #b8860b;
+            color: black;
+            box-shadow: 0 2px 12px gold;
+        }
+        .toggle-sidebar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background: #b22222;
+            border: none;
+            font-size: 28px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 10px black;
+        }
+        .content-area {
+            flex: 1;
+            margin-left: 0;
+            padding: 30px 25px;
+            transition: margin 0.3s;
+        }
+        .sidebar.open + .content-area { margin-left: 280px; }
+        .dashboard-card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 6px solid hotpink;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .game-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin: 25px 0;
+            justify-content: center;
+        }
+        .game-item {
+            background: #111;
+            border-radius: 24px;
+            padding: 12px;
+            text-align: center;
+            width: 110px;
+            border: 1px solid gold;
+        }
+        .game-item img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        .game-item span { display: block; margin-top: 8px; font-weight: bold; color: #ffcc88; }
+        button, .btn {
+            background: #ff3366;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+        }
+        button.success { background: #2e7d32; }
+        input, select {
+            padding: 12px;
+            border-radius: 40px;
+            border: none;
+            background: #2a2a2a;
+            color: white;
+            margin: 6px 0;
+            width: 100%;
+        }
+        .flex-form { display: flex; flex-direction: column; gap: 14px; }
+        .balance-badge {
+            background: gold;
+            color: black;
+            padding: 8px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        footer {
+            background: #0b0f0b;
+            margin-top: 50px;
+            padding: 30px 20px;
+            text-align: center;
+            border-top: 2px solid maroon;
+            border-radius: 40px 40px 0 0;
+            color: #aaa;
+        }
+        .notification-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e2a1e;
+            border-left: 6px solid gold;
+            padding: 12px 20px;
+            border-radius: 20px;
+            z-index: 300;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .bank-alert {
+            background: #0a3b2f;
+            border-left: 6px solid #00ffaa;
+            color: #ccffcc;
+        }
+        .bank-verification {
+            background: #1a2a2a;
+            padding: 10px;
+            border-radius: 20px;
+            margin: 10px 0;
+            border-left: 4px solid #00ccff;
+        }
+        .bank-verification.success { border-left-color: #00ff88; }
+        .bank-verification.error { border-left-color: #ff3366; }
+        @media (max-width: 780px) {
+            .sidebar { width: 260px; }
+            .content-area { padding: 20px 15px; }
+            .sidebar.open + .content-area { margin-left: 260px; }
+            .toggle-sidebar { left: 10px; top: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="ageGate" class="age-gate">
+    <div class="age-card">
+        <div class="age-badge">16+</div>
+        <h2>🔞 AGE VERIFICATION</h2>
+        <p style="color:#ffaa66">GAMER CONTENT ONLY — MUST BE 16 OR OLDER</p>
+        <div style="background:white; width:80px; height:80px; margin:10px auto; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#dc143c;">
+            <span style="font-size:48px;">⚠️</span>
+        </div>
+        <p>You confirm that you are at least 16 years old to participate in WARLORDS tasks.</p>
+        <button class="confirm-age" id="confirmAgeBtn">I AM 16+ ✓</button>
+    </div>
+</div>
+
+<div class="app-wrapper" id="appRoot">
+    <button class="toggle-sidebar" id="toggleSidebarBtn">☰</button>
+    <div class="main-layout">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>⚔️ WARLORDS</h2>
+                <p style="font-size:12px;">Bounty Arena</p>
+            </div>
+            <nav>
+                <ul>
+                    <li data-nav="dashboard">🏠 Dashboard</li>
+                    <li data-nav="upload">🎮 Upload Video</li>
+                    <li data-nav="withdrawals">💰 Withdrawals</li>
+                    <li data-nav="profile">👤 Profile</li>
+                    <li data-nav="myvideos">📼 Uploaded Videos</li>
+                    <li data-nav="about">ℹ️ About Site</li>
+                    <li data-nav="about-sec" style="padding-left: 20px; font-size:0.9rem;">  ├─ 📜 How It Works</li>
+                    <li data-nav="about-faq" style="padding-left: 20px; font-size:0.9rem;">  ├─ ❓ FAQ</li>
+                    <li data-nav="about-rules" style="padding-left: 20px; font-size:0.9rem;">  ├─ 📋 Rules</li>
+                    <li data-nav="installapp">📲 Install App</li>
+                    <li data-nav="logout">🚪 Logout</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="content-area" id="mainContent">
+            <div id="dynamicPanel">Loading...</div>
+            <footer>
+                <p>&copy; 𝗪𝗔𝗥𝗟𝗢𝗥𝗗𝗦 — Upload High quality Gameplay to Earn massively with less stress.</p>
+                <p style="margin-top:8px;">🎮 𝗙𝗥𝗘𝗘 𝗙𝗜𝗥𝗘 | 𝗖𝗢𝗗:𝗠 | 𝗣𝗨𝗕:𝗚 | 𝗕𝗟𝗢𝗢𝗗 𝗦𝗧𝗥𝗜𝗞𝗘 | 𝗠𝗢𝗕𝗜𝗟𝗘 𝗟𝗘𝗚𝗘𝗡𝗗 | 𝗗𝗘𝗟𝗧𝗔 𝗙𝗢𝗥𝗖𝗘</p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ====================== PAYSTACK CONFIG ======================
+    // 🔑 YOUR PAYSTACK TEST KEY
+    const PAYSTACK_SECRET_KEY = "sk_test_cc150f72b038be6c2839ec8e0a44a5a27d30491c";
+    
+    // ====================== PROXY CONFIG ======================
+    // Change this to your server URL
+    const PROXY_URL = window.location.origin + "/proxy.php";
+    
+    // ====================== WARLORD CONFIG ======================
+    const PARTNER_SIGNUP_CODE = "WARLORD-PARTNER-2026";
+    const WITHDRAWAL_DAY = 5; // 5 = Friday
+    const WITHDRAWAL_HOUR = 12; // 12 PM noon
+    
+    // Storage keys
+    const STORAGE_USERS = "warlords_users";
+    const STORAGE_DEVICE_MAP = "warlords_device_map";
+    const STORAGE_CURRENT_USER = "warlords_current";
+    const DEVICE_ID_KEY = "warlords_device_id";
+    
+    function getDeviceId() {
+        let deviceId = localStorage.getItem(DEVICE_ID_KEY);
+        if (!deviceId) {
+            deviceId = 'device_' + Math.random().toString(36).substr(2, 16) + '_' + Date.now();
+            localStorage.setItem(DEVICE_ID_KEY, deviceId);
+        }
+        return deviceId;
+    }
+    
+    let usersDB = [];
+    function loadUsers() { const stored = localStorage.getItem(STORAGE_USERS); usersDB = stored ? JSON.parse(stored) : []; }
+    function saveUsers() { localStorage.setItem(STORAGE_USERS, JSON.stringify(usersDB)); }
+    function getDeviceMap() { const raw = localStorage.getItem(STORAGE_DEVICE_MAP); return raw ? JSON.parse(raw) : {}; }
+    function saveDeviceMap(map) { localStorage.setItem(STORAGE_DEVICE_MAP, JSON.stringify(map)); }
+    
+    let currentUser = null;
+    function findUserByUsername(username) { return usersDB.find(u => u.username === username); }
+    
+    // ====================== PAYSTACK API FUNCTIONS ======================
+    
+    // Verify bank account using PHP proxy (NO CORS)
+    async function verifyBankAccount(accountNumber, bankCode) {
+        try {
+            const response = await fetch(PROXY_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    account_number: accountNumber,
+                    bank_code: bankCode
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status) {
+                return {
+                    success: true,
+                    accountName: data.data.account_name,
+                    bankName: data.data.bank_name,
+                    accountNumber: data.data.account_number,
+                    bankCode: bankCode
+                };
+            }
+            return { success: false, error: data.message || "Verification failed" };
+        } catch (error) {
+            console.error("Verification Error:", error);
+            return { success: false, error: "Network error. Please check your connection." };
+        }
+    }
+    
+    // Get all banks using PHP proxy
+    async function getBankList() {
+        try {
+            const response = await fetch(PROXY_URL + '?action=get_banks', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await response.json();
+            return data.status ? data.data : [];
+        } catch (error) {
+            console.error("Bank List Error:", error);
+            return [];
+        }
+    }
+    
+    // Generate claim code
+    function generateClaimCode() {
+        const randomNum = Math.floor(100 + Math.random() * 900);
+        const randomNum2 = Math.floor(10 + Math.random() * 90);
+        return `WAR${randomNum}${randomNum2}`;
+    }
+    
+    // Register
+    function registerUser(username, password, dob, partnerCode) {
+        const deviceId = getDeviceId();
+        const deviceMap = getDeviceMap();
+        if(deviceMap[deviceId]) return { success: false, error: "This device already has an account. No multiple accounts." };
+        if(partnerCode !== PARTNER_SIGNUP_CODE) return { success: false, error: "Invalid partner code." };
+        if(username !== username.toUpperCase()) return { success: false, error: "Username must be ALL CAPITAL LETTERS." };
+        if(findUserByUsername(username)) return { success: false, error: "Username exists." };
+        const birthDate = new Date(dob);
+        let age = new Date().getFullYear() - birthDate.getFullYear();
+        const m = new Date().getMonth() - birthDate.getMonth();
+        if(m < 0 || (m === 0 && new Date().getDate() < birthDate.getDate())) age--;
+        if(age < 16) return { success: false, error: "Must be 16 or older." };
+        
+        const newUser = {
+            username, password, dob, balance: 0, totalEarned: 0,
+            uploadedVideos: [],
+            withdrawalRequests: [],
+            transactions: [],
+            createdAt: new Date().toISOString()
+        };
+        usersDB.push(newUser);
+        saveUsers();
+        deviceMap[deviceId] = username;
+        saveDeviceMap(deviceMap);
+        return { success: true, user: newUser };
+    }
+    
+    function loginUser(username, password) {
+        const user = findUserByUsername(username);
+        if(!user || user.password !== password) return { success: false, error: "Invalid credentials" };
+        const deviceId = getDeviceId();
+        const deviceMap = getDeviceMap();
+        if(deviceMap[deviceId] && deviceMap[deviceId] !== username) return { success: false, error: "Device locked to another account." };
+        if(!deviceMap[deviceId]) { deviceMap[deviceId] = username; saveDeviceMap(deviceMap); }
+        return { success: true, user };
+    }
+    
+    function updateUserData(updatedUser) {
+        const idx = usersDB.findIndex(u => u.username === updatedUser.username);
+        if(idx !== -1) usersDB[idx] = updatedUser;
+        saveUsers();
+        if(currentUser && currentUser.username === updatedUser.username) currentUser = updatedUser;
+    }
+    
+    // Video & claim
+    function addUploadedVideo(username, fileName, gameType) {
+        const user = findUserByUsername(username);
+        if(!user) return null;
+        const claimCode = generateClaimCode();
+        const newVideo = {
+            id: Date.now() + Math.random().toString(36),
+            fileName, game: gameType, dateUploaded: new Date().toISOString(),
+            rewardClaimed: false, claimCode: claimCode, claimCodeUsed: null
+        };
+        user.uploadedVideos.unshift(newVideo);
+        updateUserData(user);
+        return newVideo;
+    }
+    
+    function claimVideoReward(videoId, inputCode, currentUsername) {
+        const user = findUserByUsername(currentUsername);
+        if(!user) return { success: false, error: "User error" };
+        const video = user.uploadedVideos.find(v => v.id === videoId);
+        if(!video) return { success: false, error: "Video not found" };
+        if(video.rewardClaimed) return { success: false, error: "Reward already claimed." };
+        if(inputCode !== video.claimCode) return { success: false, error: "Invalid claim code. Use the code provided after upload." };
+        video.rewardClaimed = true;
+        video.claimCodeUsed = inputCode;
+        video.claimDate = new Date().toISOString();
+        user.balance += 1000;
+        user.totalEarned += 1000;
+        updateUserData(user);
+        showToastNotification(`✅ ₦1000 credited! Nice job.`);
+        return { success: true, message: "₦1000 credited!", claimCode: video.claimCode };
+    }
+    
+    // Check if today is Friday
+    function isWithdrawalDay() {
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        return dayOfWeek === WITHDRAWAL_DAY;
+    }
+    
+    function getNextWithdrawalDate() {
+        const today = new Date();
+        const currentDay = today.getDay();
+        let daysToAdd = WITHDRAWAL_DAY - currentDay;
+        if (daysToAdd <= 0) daysToAdd += 7;
+        const nextFriday = new Date(today);
+        nextFriday.setDate(today.getDate() + daysToAdd);
+        nextFriday.setHours(WITHDRAWAL_HOUR, 0, 0, 0);
+        return nextFriday;
+    }
+    
+    // Withdrawal
+    function requestWithdrawal(username, amount, bankAccount, bankName) {
+        const user = findUserByUsername(username);
+        if(!user) return { success: false, error: "User not found" };
+        if(amount <= 0 || amount > user.balance) return { success: false, error: "Insufficient balance" };
+        if(amount < 500) return { success: false, error: "Minimum withdrawal is ₦500" };
+        
+        if (!isWithdrawalDay()) {
+            const nextFriday = getNextWithdrawalDate();
+            return { 
+                success: false, 
+                error: `Withdrawals are only processed on Fridays. Next withdrawal: ${nextFriday.toLocaleDateString()} at ${nextFriday.toLocaleTimeString()}` 
+            };
+        }
+        
+        const requestObj = {
+            id: Date.now(),
+            amount,
+            bankDetails: { bankName, accountNumber: bankAccount },
+            status: "pending",
+            requestedDate: new Date().toISOString(),
+            processedDate: null
+        };
+        user.withdrawalRequests.push(requestObj);
+        updateUserData(user);
+        return { success: true, message: `Withdrawal request submitted! Processing on Friday.` };
+    }
+    
+    function completeWithdrawal(username, requestId) {
+        const user = findUserByUsername(username);
+        if(!user) return false;
+        const req = user.withdrawalRequests.find(r => r.id === requestId);
+        if(!req || req.status !== "pending") return false;
+        
+        if (!isWithdrawalDay()) return false;
+        
+        req.status = "completed";
+        req.processedDate = new Date().toISOString();
+        user.balance -= req.amount;
+        if(user.balance < 0) user.balance = 0;
+        
+        const maskedAccount = req.bankDetails.accountNumber.slice(-4);
+        const transaction = {
+            id: Date.now(),
+            type: "withdrawal",
+            amount: req.amount,
+            bankName: req.bankDetails.bankName,
+            accountNumber: req.bankDetails.accountNumber,
+            status: "completed",
+            message: `Bank alert: ₦${req.amount} sent to account ****${maskedAccount} (${req.bankDetails.bankName})`,
+            timestamp: new Date().toISOString()
+        };
+        if (!user.transactions) user.transactions = [];
+        user.transactions.unshift(transaction);
+        
+        updateUserData(user);
+        
+        const fakeAlertMsg = `🏦 BANK CREDIT ALERT 🏦\nAmount: ₦${req.amount}\nAccount: ****${maskedAccount}\nBank: ${req.bankDetails.bankName}\nReference: WAR${Math.floor(Math.random()*10000)}\nStatus: SUCCESSFUL`;
+        showToastNotification(fakeAlertMsg, true);
+        showBrowserNotification("💰Bank Alert", `₦${req.amount} credited to account ****${maskedAccount}.`);
+        
+        return true;
+    }
+    
+    function processAllPendingWithdrawals(username) {
+        const user = findUserByUsername(username);
+        if(!user) return;
+        if (!isWithdrawalDay()) return;
+        let anyCompleted = false;
+        for(let req of user.withdrawalRequests) {
+            if(req.status === "pending") {
+                if(completeWithdrawal(username, req.id)) anyCompleted = true;
+            }
+        }
+        if(anyCompleted && currentUser && currentUser.username === username) renderMainApp();
+    }
+    
+    // Toast & Notifications
+    function showToastNotification(message, isBank = false) {
+        const toast = document.createElement('div');
+        toast.className = 'notification-toast';
+        if(isBank) toast.style.background = "#0a3b2f";
+        toast.innerHTML = `<span>${message}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 5000);
+    }
+    
+    function showBrowserNotification(title, body) {
+        if ("Notification" in window && Notification.permission === "granted") {
+            new Notification(title, { body, icon: "https://placehold.co/100x100/ffaa33/000?text=WL" });
+        } else if ("Notification" in window && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+    }
+    
+    // PWA install
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+    
+    function triggerInstallApp() {
+        if (deferredPrompt) { 
+            deferredPrompt.prompt(); 
+            deferredPrompt = null;
+        } else {
+            showToastNotification("📱 To install as APK on Android: Use Chrome → Add to Home Screen");
+            showToastNotification("📱 For iOS: Use Safari → Share → Add to Home Screen");
+        }
+    }
+    
+    // ====================== UI RENDERING ======================
+    let currentNav = "dashboard";
+    const contentDiv = document.getElementById("dynamicPanel");
+    
+    function renderSidebarActive() {
+        document.querySelectorAll('.sidebar nav ul li').forEach(li => {
+            const navVal = li.getAttribute('data-nav');
+            if(navVal === currentNav) li.classList.add('active');
+            else li.classList.remove('active');
+        });
+    }
+    
+    function renderDashboard() {
+        if(!currentUser) return;
+        processAllPendingWithdrawals(currentUser.username);
+        const videosCount = currentUser.uploadedVideos.length;
+        const claimedCount = currentUser.uploadedVideos.filter(v => v.rewardClaimed).length;
+        const pendingWithdraw = currentUser.withdrawalRequests.filter(w => w.status === "pending").length;
+        const withdrawalDay = isWithdrawalDay() ? "✅ Today is withdrawal day!" : `⏳ Next withdrawal: ${getNextWithdrawalDate().toLocaleDateString()}`;
+        
+        return `
+            <div class="dashboard-card">
+                <h2 style="color:gold">🏆 WARLORD DASHBOARD</h2>
+                <div style="display:flex; gap:20px; flex-wrap:wrap; margin:20px 0">
+                    <div style="background:#1e2a1e; padding:18px; border-radius:32px; flex:1"><span>💰 Balance</span><h2>₦${currentUser.balance.toLocaleString()}</h2></div>
+                    <div style="background:#1e2a1e; padding:18px; border-radius:32px; flex:1"><span>🎬 Total Videos</span><h2>${videosCount}</h2></div>
+                    <div style="background:#1e2a1e; padding:18px; border-radius:32px; flex:1"><span>✅ Claimed Tasks</span><h2>${claimedCount}</h2></div>
+                    <div style="background:#1e2a1e; padding:18px; border-radius:32px; flex:1"><span>⏳ Pending Withdrawals</span><h2>${pendingWithdraw}</h2></div>
+                </div>
+                <div style="background: #2a1a1a; padding: 12px; border-radius: 20px; border-left: 4px solid gold;">
+                    <p>${withdrawalDay}</p>
+                    <p style="font-size:0.9rem; color:#ffaa66;">💰 Withdrawals processed every Friday at 12 PM</p>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <h3>🔥 Featured Games</h3>
+                <div class="game-gallery">
+                    <div class="game-item"><img src="FF.jpg" alt="FreeFire"><span>Free Fire</span></div>
+                    <div class="game-item"><img src="CODM.jpg" alt="COD:M"><span>Call of Duty</span></div>
+                    <div class="game-item"><img src="PUBG.jpg" alt="PUBG"><span>PUBG Mobile</span></div>
+                    <div class="game-item"><img src="BS.jpg" alt="BloodStrike"><span>Blood Strike</span></div>
+                    <div class="game-item"><img src="ML.jpg" alt="Mobilelegend"><span>Mobile legend</span></div>
+                    <div class="game-item"><img src="DF..jpg" alt="DeltaForce"><span>Delta Force</span></div>
+                </div>
+            </div>
+        `;
+    }
+    
+    function renderUploadVideo() {
+        return `
+            <div class="dashboard-card">
+                <h2>🎥 Upload Gameplay & Earn ₦1000</h2>
+                <p>Upload video, then claim using the code provided.</p>
+                <div class="flex-form">
+                    <select id="gameSelectUpload">
+                        <option>Free Fire</option><option>Call of Duty Mobile</option><option>PUBG Mobile</option>
+                        <option>Blood Strike</option><option>Mobile Legend</option><option>Delta Force</option>
+                    </select>
+                    <input type="file" id="videoFileUpload" accept="video/*">
+                    <button id="uploadVideoBtn">📤 Upload Video</button>
+                    <div id="uploadMessage"></div>
+                    <div id="claimCodeDisplay" style="background:#1a2a1a; padding:10px; border-radius:20px; display:none;"></div>
+                    <hr>
+                    <h3>💰 Claim Reward</h3>
+                    <input type="text" id="videoClaimCode" placeholder="Enter your claim code">
+                    <button id="claimRewardBtn" class="success">Claim ₦1000</button>
+                </div>
+            </div>
+        `;
+    }
+    
+    function renderWithdrawals() {
+        if(!currentUser) return;
+        processAllPendingWithdrawals(currentUser.username);
+        const isFriday = isWithdrawalDay();
+        const nextFriday = getNextWithdrawalDate();
+        
+        let pendingHtml = `<h3>Withdrawal Requests</h3><ul>`;
+        currentUser.withdrawalRequests.forEach(w => {
+            const reqTime = new Date(w.requestedDate);
+            const masked = w.bankDetails.accountNumber.slice(-4);
+            pendingHtml += `<li>₦${w.amount} - ${w.status} (Bank: ${w.bankDetails.bankName} ****${masked}) requested: ${reqTime.toLocaleString()}</li>`;
+        });
+        pendingHtml += `</ul>`;
+        
+        let transactionsHtml = `<h3>📜 Transaction History</h3><ul>`;
+        if(currentUser.transactions && currentUser.transactions.length) {
+            currentUser.transactions.forEach(t => {
+                transactionsHtml += `<li>${t.message} - ${new Date(t.timestamp).toLocaleString()}</li>`;
+            });
+        } else {
+            transactionsHtml += `<li>No transactions yet.</li>`;
+        }
+        transactionsHtml += `</ul>`;
+        
+        return `
+            <div class="dashboard-card">
+                <h2>💸 Withdraw Funds</h2>
+                <div style="background: #1a2a2a; padding: 12px; border-radius: 20px; margin-bottom: 15px;">
+                    <p>💰 Balance: ₦${currentUser.balance.toLocaleString()}</p>
+                    <p>Min ₦500. Withdrawals processed on <strong>${isFriday ? '✅ TODAY (Friday)' : nextFriday.toLocaleDateString()}</strong></p>
+                    ${!isFriday ? `<p style="color:#ffaa66;">⏳ Next withdrawal: ${nextFriday.toLocaleDateString()} at ${nextFriday.toLocaleTimeString()}</p>` : ''}
+                </div>
+                <div class="flex-form">
+                    <input type="number" id="withdrawAmount" placeholder="Amount (NGN)">
+                    <select id="bankSelect">
+                        <option value="">Select Bank...</option>
+                    </select>
+                    <input type="text" id="accountNumber" placeholder="Account Number (10 digits)">
+                    <button id="verifyBankBtn" style="background:#0066cc;">🔍 Verify Account with Paystack</button>
+                    <div id="bankVerificationResult" class="bank-verification" style="display:none;"></div>
+                    <button id="requestWithdrawBtn" ${!isFriday ? 'disabled style="opacity:0.6;"' : ''}>${isFriday ? 'Request Withdrawal' : '⏳ Withdrawals on Fridays Only'}</button>
+                </div>
+                <div id="withdrawMsg"></div>
+                <hr>
+                ${pendingHtml}
+                ${transactionsHtml}
+            </div>
+        `;
+    }
+    
+    function renderProfile() {
+        return `
+            <div class="dashboard-card">
+                <h2>👤 Profile</h2>
+                <p><strong>Username:</strong> ${currentUser.username}</p>
+                <p><strong>Date of Birth:</strong> ${currentUser.dob}</p>
+                <p><strong>Total Earned:</strong> ₦${currentUser.totalEarned.toLocaleString()}</p>
+                <p><strong>Balance:</strong> ₦${currentUser.balance.toLocaleString()}</p>
+                <p><strong>Account Created:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</p>
+                <p><strong>Videos Uploaded:</strong> ${currentUser.uploadedVideos.length}</p>
+                <button id="enableNotifBtn">🔔 Enable Browser Notifications</button>
+            </div>
+        `;
+    }
+    
+    function renderUploadedVideos() {
+        let videoList = `<h2>Your Videos</h2>`;
+        if (currentUser.uploadedVideos.length === 0) {
+            videoList += `<p>No videos uploaded yet.</p>`;
+        }
+        currentUser.uploadedVideos.forEach(vid => {
+            videoList += `
+                <div style="background:#151f15; margin:12px 0; padding:16px; border-radius:28px;">
+                    <strong>🎬 ${vid.fileName}</strong> | Game: ${vid.game}<br>
+                    Uploaded: ${new Date(vid.dateUploaded).toLocaleString()}<br>
+                    Claim Code: ${vid.claimCode || 'N/A'}<br>
+                    Reward: ${vid.rewardClaimed ? "✅ Claimed (₦1000)" : "❌ Not claimed"} 
+                    ${!vid.rewardClaimed ? `<button class="claimSingleBtn" data-id="${vid.id}">Claim now</button>` : ''}
+                </div>
+            `;
+        });
+        return `<div class="dashboard-card">${videoList}</div>`;
+    }
+    
+    function renderAbout() {
+        return `<div class="dashboard-card">
+            <h2>About WARLORDS</h2>
+            <p>This is an exclusive <strong>Gaming Platform</strong> where gamers earn ₦1000 per video upload.</p>
+            <p>🎯 <strong>How It Works:</strong></p>
+            <ul style="margin:10px 20px;">
+                <li>1. Upload your gameplay video</li>
+                <li>2. Get a unique claim code (e.g., WAR12345)</li>
+                <li>3. Use the code to claim ₦1000 reward</li>
+                <li>4. Withdraw your earnings every Friday</li>
+            </ul>
+            <p>💡 <strong>Supported Games:</strong> Free Fire, COD:M, PUBG, Blood Strike, Mobile Legend, Delta Force</p>
+        </div>`;
+    }
+    
+    function renderAboutFAQ() {
+        return `<div class="dashboard-card">
+            <h2>❓ Frequently Asked Questions</h2>
+            <div style="margin:10px 0;">
+                <h4>Q: How do I earn money?</h4>
+                <p>A: Upload your gameplay videos and claim rewards using the provided claim code.</p>
+            </div>
+            <div style="margin:10px 0;">
+                <h4>Q: When can I withdraw?</h4>
+                <p>A: Withdrawals are processed every Friday at 12 PM.</p>
+            </div>
+            <div style="margin:10px 0;">
+                <h4>Q: What games are supported?</h4>
+                <p>A: Free Fire, Call of Duty Mobile, PUBG Mobile, Blood Strike, Mobile Legend, Delta Force.</p>
+            </div>
+            <div style="margin:10px 0;">
+                <h4>Q: How much can I earn per video?</h4>
+                <p>A: ₦1000 per video upload and claim.</p>
+            </div>
+        </div>`;
+    }
+    
+    function renderAboutRules() {
+        return `<div class="dashboard-card">
+            <h2>📋 Platform Rules</h2>
+            <ul style="margin:10px 20px;">
+                <li>✅ Must be 16 years or older</li>
+                <li>✅ One account per device</li>
+                <li>✅ Videos must be original gameplay</li>
+                <li>✅ No duplicate uploads</li>
+                <li>✅ Claim codes are unique per video</li>
+                <li>✅ Withdrawals only on Fridays</li>
+                <li>✅ Minimum withdrawal: ₦500</li>
+            </ul>
+        </div>`;
+    }
+    
+    function renderInstallApp() {
+        return `<div class="dashboard-card">
+            <h2>📲 Install WARLORDS App</h2>
+            <div style="margin:20px 0;">
+                <p><strong>Android:</strong></p>
+                <p>1. Open Chrome browser</p>
+                <p>2. Tap the menu (3 dots) → Add to Home Screen</p>
+                <p>3. Name it "WARLORDS" and tap Add</p>
+                <br>
+                <p><strong>iOS:</strong></p>
+                <p>1. Open Safari browser</p>
+                <p>2. Tap the Share button → Add to Home Screen</p>
+                <p>3. Name it "WARLORDS" and tap Add</p>
+            </div>
+            <button id="doInstallAppBtn">📲 Install WARLORDS</button>
+        </div>`;
+    }
+    
+    function attachNavSpecificEvents() {
+        // Upload Video
+        if(currentNav === "upload") {
+            document.getElementById("uploadVideoBtn")?.addEventListener("click", () => {
+                const file = document.getElementById("videoFileUpload").files[0];
+                const game = document.getElementById("gameSelectUpload").value;
+                if(!file) { alert("Select video"); return; }
+                const result = addUploadedVideo(currentUser.username, file.name, game);
+                if (result) {
+                    document.getElementById("uploadMessage").innerHTML = `<span style="color:green;">✅ Video uploaded! Your claim code: <strong style="color:gold;">${result.claimCode}</strong></span>`;
+                    document.getElementById("claimCodeDisplay").style.display = "block";
+                    document.getElementById("claimCodeDisplay").innerHTML = `📋 Your Claim Code: <strong style="color:gold; font-size:1.2rem;">${result.claimCode}</strong>`;
+                }
+            });
+            
+            document.getElementById("claimRewardBtn")?.addEventListener("click", () => {
+                const code = document.getElementById("videoClaimCode").value.trim();
+                const last = currentUser.uploadedVideos[0];
+                if(!last) { alert("Upload a video first"); return; }
+                const res = claimVideoReward(last.id, code, currentUser.username);
+                alert(res.message || res.error);
+                renderMainApp();
+            });
+        }
+        
+        // Withdrawals with Paystack
+        if(currentNav === "withdrawals") {
+            // Populate banks
+            async function loadBanks() {
+                try {
+                    const response = await fetch('https://api.paystack.co/bank', {
+                        headers: {
+                            'Authorization': `Bearer ${PAYSTACK_SECRET_KEY}`
+                        }
+                    });
+                    const data = await response.json();
+                    const select = document.getElementById("bankSelect");
+                    if (data.status && data.data.length > 0) {
+                        select.innerHTML = '<option value="">Select Bank...</option>';
+                        data.data.forEach(bank => {
+                            const option = document.createElement("option");
+                            option.value = bank.code;
+                            option.textContent = bank.name;
+                            select.appendChild(option);
+                        });
+                    } else {
+                        select.innerHTML = '<option value="">⚠️ Failed to load banks</option>';
+                    }
+                } catch (error) {
+                    console.error("Bank Load Error:", error);
+                    document.getElementById("bankSelect").innerHTML = '<option value="">⚠️ Error loading banks</option>';
+                }
+            }
+            loadBanks();
+            
+            document.getElementById("verifyBankBtn")?.addEventListener("click", async () => {
+                const accountNumber = document.getElementById("accountNumber").value.trim();
+                const bankCode = document.getElementById("bankSelect").value;
+                
+                if (!accountNumber || accountNumber.length !== 10) {
+                    alert("Please enter a valid 10-digit account number.");
+                    return;
+                }
+                if (!bankCode) {
+                    alert("Please select a bank.");
+                    return;
+                }
+                
+                const resultDiv = document.getElementById("bankVerificationResult");
+                resultDiv.style.display = "block";
+                resultDiv.className = "bank-verification";
+                resultDiv.innerHTML = "⏳ Verifying account with Paystack...";
+                
+                const verification = await verifyBankAccount(accountNumber, bankCode);
+                if (verification.success) {
+                    resultDiv.className = "bank-verification success";
+                    resultDiv.innerHTML = `
+                        ✅ Account Verified Successfully!<br>
+                        📌 Account Name: <strong>${verification.accountName}</strong><br>
+                        🏦 Bank: ${verification.bankName}<br>
+                        🔢 Account: ${verification.accountNumber}
+                    `;
+                } else {
+                    resultDiv.className = "bank-verification error";
+                    resultDiv.innerHTML = `❌ ${verification.error}`;
+                }
+            });
+            
+            document.getElementById("requestWithdrawBtn")?.addEventListener("click", () => {
+                const amount = parseFloat(document.getElementById("withdrawAmount").value);
+                const bankSelect = document.getElementById("bankSelect");
+                const bankName = bankSelect.options[bankSelect.selectedIndex]?.text || "";
+                const acc = document.getElementById("accountNumber").value;
+                
+                if(!bankName || !acc || isNaN(amount) || amount < 500) {
+                    alert("Fill all fields correctly, min ₦500. Please verify your account first.");
+                    return;
+                }
+                const res = requestWithdrawal(currentUser.username, amount, acc, bankName);
+                alert(res.message || res.error);
+                if(res.success) renderMainApp();
+            });
+        }
+        
+        // My Videos
+        if(currentNav === "myvideos") {
+            document.querySelectorAll(".claimSingleBtn").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const vidId = btn.getAttribute("data-id");
+                    const code = prompt("Enter the claim code for this video:");
+                    if(code) {
+                        const res = claimVideoReward(vidId, code, currentUser.username);
+                        alert(res.message || res.error);
+                        renderMainApp();
+                    }
+                });
+            });
+        }
+        
+        // Profile
+        if(currentNav === "profile") {
+            document.getElementById("enableNotifBtn")?.addEventListener("click", () => Notification.requestPermission());
+        }
+        
+        // Install App
+        if(currentNav === "installapp") {
+            document.getElementById("doInstallAppBtn")?.addEventListener("click", triggerInstallApp);
+        }
+    }
+    
+    function renderMainApp() {
+        if(!currentUser) {
+            contentDiv.innerHTML = renderAuthScreen();
+            attachAuthEvents();
+            return;
+        }
+        let html = "";
+        if(currentNav === "dashboard") html = renderDashboard();
+        else if(currentNav === "upload") html = renderUploadVideo();
+        else if(currentNav === "withdrawals") html = renderWithdrawals();
+        else if(currentNav === "profile") html = renderProfile();
+        else if(currentNav === "myvideos") html = renderUploadedVideos();
+        else if(currentNav === "about") html = renderAbout();
+        else if(currentNav === "about-sec") html = renderAbout();
+        else if(currentNav === "about-faq") html = renderAboutFAQ();
+        else if(currentNav === "about-rules") html = renderAboutRules();
+        else if(currentNav === "installapp") html = renderInstallApp();
+        else if(currentNav === "logout") { 
+            currentUser = null; 
+            localStorage.removeItem(STORAGE_CURRENT_USER); 
+            renderMainApp(); 
+            return; 
+        }
+        contentDiv.innerHTML = html;
+        attachNavSpecificEvents();
+        renderSidebarActive();
+    }
+    
+    function renderAuthScreen() {
+        return `<div class="dashboard-card" style="max-width:500px; margin:auto;"><h2 style="color:gold">🔐 WARLORDS ACCESS</h2>
+            <div><button id="showSignupBtn" style="background:maroon;">SIGN UP</button> <button id="showSigninBtn" style="background:#2e5c2e;">SIGN IN</button></div>
+            <div id="authFormContainer"></div><div id="authMessage"></div></div>`;
+    }
+    
+    function attachAuthEvents() {
+        const container = document.getElementById("authFormContainer");
+        function showSignup() { container.innerHTML = `<div class="flex-form"><input type="text" id="signupUsername" placeholder="USERNAME (ALL CAPS)"><input type="password" id="signupPassword" placeholder="Password"><input type="date" id="signupDob"><input type="text" id="partnerCode" placeholder="Partner Code"><button id="doSignupBtn">CREATE ACCOUNT</button></div>`;
+            document.getElementById("doSignupBtn")?.addEventListener("click",()=>{ const uname=document.getElementById("signupUsername").value.trim(); const pwd=document.getElementById("signupPassword").value; const dob=document.getElementById("signupDob").value; const pcode=document.getElementById("partnerCode").value; const res=registerUser(uname,pwd,dob,pcode); const msgDiv=document.getElementById("authMessage"); if(res.success){ msgDiv.innerHTML=`<span style="color:lightgreen;">✅ Signup success! Sign in.</span>`; showSignin();} else msgDiv.innerHTML=`<span style="color:red;">❌ ${res.error}</span>`;});}
+        function showSignin() { container.innerHTML=`<div class="flex-form"><input type="text" id="loginUsername" placeholder="Username"><input type="password" id="loginPassword" placeholder="Password"><button id="doSigninBtn">LOGIN</button></div>`;
+            document.getElementById("doSigninBtn")?.addEventListener("click",()=>{ const uname=document.getElementById("loginUsername").value.trim(); const pwd=document.getElementById("loginPassword").value; const res=loginUser(uname,pwd); if(res.success){ currentUser=res.user; localStorage.setItem(STORAGE_CURRENT_USER,currentUser.username); renderMainApp();} else document.getElementById("authMessage").innerHTML=`<span style="color:red;">${res.error}</span>`;});}
+        document.getElementById("showSignupBtn")?.addEventListener("click",showSignup);
+        document.getElementById("showSigninBtn")?.addEventListener("click",showSignin);
+        showSignup();
+    }
+    
+    function initNav() {
+        document.querySelectorAll('.sidebar nav ul li').forEach(li => {
+            li.addEventListener('click', () => { 
+                const nav = li.getAttribute('data-nav'); 
+                if(nav) { 
+                    currentNav = nav; 
+                    renderMainApp(); 
+                } 
+            });
+        });
+        
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("toggleSidebarBtn");
+        let sidebarOpen = false;
+        
+        toggleBtn.addEventListener("click", () => {
+            sidebarOpen = !sidebarOpen;
+            if (sidebarOpen) {
+                sidebar.classList.add("open");
+                sidebar.classList.remove("closed");
+            } else {
+                sidebar.classList.remove("open");
+                sidebar.classList.add("closed");
+            }
+        });
+        
+        sidebar.classList.add("closed");
+    }
+    
+    document.getElementById("confirmAgeBtn").addEventListener("click", () => {
+        document.getElementById("ageGate").style.display = "none";
+        document.getElementById("appRoot").style.display = "block";
+        loadUsers();
+        const sessionUser = localStorage.getItem(STORAGE_CURRENT_USER);
+        if(sessionUser) { const found = findUserByUsername(sessionUser); if(found && getDeviceMap()[getDeviceId()] === found.username) currentUser = found; else currentUser = null; }
+        renderMainApp();
+        initNav();
+        if("Notification" in window && Notification.permission === "default") Notification.requestPermission();
+    });
+</script>
+</body>
+</html>
